@@ -31,17 +31,18 @@ def newton_raphson(f, xn):
     print(f"x={xn:.4f}, f(x)={f(xn):.4f}, f'(x)={der(xn):.4f}, xn={valor:.4f}, f(xn)={f(valor):.4f}");
     return valor;
 
+def secant(f, a, b):
+    valor = (a * f(b) - b * f(a)) / (f(b) - f(a));
+    print(f"Xn-1={a}, f(Xn-1)={f(a):.4f}, Xn={b}, f(Xn)={f(b):.4f}, Xn+1={valor:.4f}, f(Xn+1)={f(valor):.4f}");
+    return valor;
+
 def get_root(method, f, a, b, e=1e-2):
     iteration = 1;
     valor = None;
     while(1):
         if method == 4:
-            valor = false_position(f, a, b);
+            valor = secant(f, a, b);
             a, b = b, valor;
-
-            if abs(f(valor)) < e:
-                print(f"The root is {valor:.4f} in the iteration {iteration}");
-                break;
         
         else:
             if method == 1:
@@ -54,15 +55,17 @@ def get_root(method, f, a, b, e=1e-2):
                 valor = (a + b) / 2 if valor is None else valor;
                 valor = newton_raphson(f, valor);
             
-            if abs(f(valor)) < e:
-                print(f"The root is {valor:.4f} in the iteration {iteration}");
-                break;
             
-            elif f(a) * f(valor) > 0:
+            if f(a) * f(valor) > 0:
                 a = valor;
             
             else:
                 b = valor;
+        
+        
+        if abs(f(valor)) < e:
+            print(f"The root is {valor:.4f} in the iteration {iteration}");
+            break;
         
         iteration += 1;
     
